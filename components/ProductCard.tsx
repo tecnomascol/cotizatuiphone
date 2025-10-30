@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Product, PaymentMethod } from '../types';
 import { WA_BASE } from '../constants';
@@ -55,7 +54,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, paymentMethod
   }
 
   const CreditOptionsPopover = () => (
-    <div ref={popoverRef} className="absolute z-10 bottom-full mb-2 right-0 w-64 bg-[#121212] border border-[#2a2a2a] rounded-lg shadow-lg p-3 text-white text-sm">
+    <div ref={popoverRef} className="absolute z-10 bottom-full mb-2 left-0 sm:left-auto sm:right-0 w-64 bg-[#121212] border border-[#2a2a2a] rounded-lg shadow-lg p-3 text-white text-sm">
       <h4 className="font-bold mb-2 text-base">Opciones de Pago</h4>
       <ul className="space-y-1">
         <li className="flex justify-between"><span>Contado:</span> <strong>{fmtCOP(product.precios.contado)}</strong></li>
@@ -69,9 +68,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, paymentMethod
 
   return (
     <tr className="border-b border-[#2a2a2a] last:border-b-0 hover:bg-[#202020]/50 transition-colors">
-      <td className="p-3 font-bold text-white text-sm align-middle">{product.nombre}</td>
-      <td className="p-3 text-sm align-middle"><Badge>{product.estado}</Badge></td>
-      <td className="p-3 text-right font-extrabold text-[#ffdede] text-base align-middle whitespace-nowrap">
+      <td className="px-2 py-3 sm:p-3 font-bold text-white text-sm align-middle">{product.nombre}</td>
+      <td className="px-2 py-3 sm:p-3 text-sm align-middle"><Badge>{product.estado}</Badge></td>
+      <td className="px-2 py-3 sm:p-3 text-right font-extrabold text-[#ffdede] text-base align-middle whitespace-nowrap">
         <div className="flex items-center justify-end gap-2 relative">
           <span>{fmtCOP(price)}</span>
           <button
@@ -87,9 +86,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, paymentMethod
           {popoverOpen && <CreditOptionsPopover />}
         </div>
       </td>
-      <td className="p-3 align-middle">
+      <td className="px-2 py-3 sm:p-3 align-middle">
         {product.stock > 0 ? (
-          <div className="flex items-center justify-end gap-2">
+          <div className="flex items-center justify-end gap-1 sm:gap-2">
             <label htmlFor={`q-${product.nombre}`} className="sr-only">Cantidad</label>
             <input
               id={`q-${product.nombre}`}
@@ -98,13 +97,13 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, paymentMethod
               max={product.stock}
               value={quantity}
               onChange={handleQuantityChange}
-              className="w-16 bg-[#121212] text-white border border-[#2a2a2a] rounded-lg p-2 text-center focus:ring-1 focus:ring-[#e60000] focus:border-transparent"
+              className="w-14 sm:w-16 bg-[#121212] text-white border border-[#2a2a2a] rounded-lg p-2 text-center focus:ring-1 focus:ring-[#e60000] focus:border-transparent"
             />
             <button
               onClick={handleAddToCart}
-              className={`inline-flex items-center justify-center px-4 py-2 font-bold text-white rounded-lg cursor-pointer select-none transition-colors duration-300 text-sm ${isAdded ? 'bg-[#2ecc71]' : 'bg-[#e60000] hover:bg-[#b00000]'}`}
+              className={`inline-flex items-center justify-center px-3 sm:px-4 py-2 font-bold text-white rounded-lg cursor-pointer select-none transition-colors duration-300 text-sm ${isAdded ? 'bg-[#2ecc71]' : 'bg-[#e60000] hover:bg-[#b00000]'}`}
             >
-              {isAdded ? 'Agregado ✓' : 'Agregar'}
+              {isAdded ? '✓' : 'Agregar'}
             </button>
           </div>
         ) : (
