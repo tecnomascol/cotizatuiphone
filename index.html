@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -17,14 +16,777 @@
 <script type="importmap">
 {
   "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "react/": "https://aistudiocdn.com/react@^19.2.0/",
-    "react": "https://aistudiocdn.com/react@^19.2.0"
+    "react/": "https://aistudiocdn.com/react@^19.2.0/"
   }
 }
 </script>
 </head>
 <body class="bg-gradient-to-b from-[#0b0b0b] to-[#000000] text-[#e6e6e6]">
   <div id="root"></div>
+
+  <!-- 1. Cargar React y ReactDOM (versiones UMD para máxima compatibilidad) -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js" crossorigin></script>
+  
+  <!-- 2. Cargar el transpilador Babel para que JSX funcione -->
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- 3. Script principal con toda la aplicación de React -->
+  <script type="text/babel">
+    // No se usan 'import'. React y ReactDOM ya están disponibles en el scope global.
+
+    // --- CONSTANTS ---
+    const PLACEHOLDER_SVG = `data:image/svg+xml;utf8,${encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' width='400' height='400' viewBox='0 0 400 400'>
+          <defs><linearGradient id='g' x1='0' x2='1'><stop stop-color='%230a0a0a'/><stop offset='1' stop-color='%23141414'/></linearGradient></defs>
+          <rect width='100%' height='100%' fill='url(%23g)'/>
+          <g fill='none' stroke='%23e60000' stroke-width='6'>
+            <rect x='130' y='40' rx='34' ry='34' width='140' height='320'/>
+            <circle cx='200' cy='78' r='6' stroke='%23fff'/>
+          </g>
+          <text x='200' y='360' font-family='Arial, Helvetica, sans-serif' font-size='20' fill='%23e6e6e6' text-anchor='middle'>Tecno+</text>
+        </svg>`)}`;
+
+    const WA_BASE = 'https://wa.me/573001234567';
+
+    const CATALOGO = [
+      // Celulares
+      {nombre: 'iPhone X 64GB', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 600000, addi: 702000, sistecredito: 810000, brilla: 810000, banco: 900000, tipoA: 300000, tipoB: 250000, tipoC: 200000, repuesto: 100000 }},
+      {nombre: 'iPhone SE 64GB Negro (2ª Gen)', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 600000, addi: 702000, sistecredito: 810000, brilla: 810000, banco: 900000, tipoA: 500000, tipoB: 400000, tipoC: 300000, repuesto: 100000 }},
+      {nombre: 'iPhone XR 128GB', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 950000, addi: 1111500, sistecredito: 1282500, brilla: 1282500, banco: 1250000, tipoA: 500000, tipoB: 500000, tipoC: 400000, repuesto: 100000 }},
+      {nombre: 'iPhone XS Max 64GB', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 990000, addi: 1158300, sistecredito: 1336500, brilla: 1336500, banco: 1290000, tipoA: 500000, tipoB: 500000, tipoC: 400000, repuesto: 100000 }},
+      {nombre: 'iPhone 11 64GB - semi-nuevo', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 950000, addi: 1111500, sistecredito: 1282500, brilla: 1282500, banco: 1250000, tipoA: 600000, tipoB: 500000, tipoC: 400000, repuesto: 100000 }},
+      {nombre: 'iPhone 11 128GB - semi-nuevo', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1190000, addi: 1392300, sistecredito: 1606500, brilla: 1606500, banco: 1490000, tipoA: 800000, tipoB: 700000, tipoC: 600000, repuesto: 100000 }},
+      {nombre: 'iPhone 11 Pro Max 64GB', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1350000, addi: 1579500, sistecredito: 1822500, brilla: 1822500, banco: 1650000, tipoA: 900000, tipoB: 800000, tipoC: 700000 }},
+      {nombre: 'iPhone 11 Pro Max 256GB', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1490000, addi: 1743300, sistecredito: 2011500, brilla: 2011500, banco: 1790000, tipoA: 1000000, tipoB: 900000, tipoC: 800000 }},
+      {nombre: 'iPhone 12 64GB', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1200000, addi: 1404000, sistecredito: 1620000, brilla: 1620000, banco: 1500000, tipoA: 700000, tipoB: 600000, tipoC: 500000 }},
+      {nombre: 'iPhone 12 128GB', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1450000, addi: 1696500, sistecredito: 1957500, brilla: 1957500, banco: 1750000, tipoA: 900000, tipoB: 800000, tipoC: 700000 }},
+      {nombre: 'iPhone 12 Pro 128GB', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1590000, addi: 1860300, sistecredito: 2146500, brilla: 2146500, banco: 1890000, tipoA: 1200000, tipoB: 1100000, tipoC: 900000 }},
+      {nombre: 'iPhone 12 Pro 256GB', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1650000, addi: 1930500, sistecredito: 2227500, brilla: 2227500, banco: 1950000, tipoA: 1300000, tipoB: 1200000, tipoC: 1000000 }},
+      {nombre: 'iPhone 12 Pro Max 128GB', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1890000, addi: 2211300, sistecredito: 2551500, brilla: 2551500, banco: 2190000, tipoA: 1500000, tipoB: 1400000, tipoC: 1300000 }},
+      {nombre: 'iPhone 12 Pro Max 256GB', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1950000, addi: 2281500, sistecredito: 2632500, brilla: 2632500, banco: 2250000, tipoA: 1700000, tipoB: 1600000, tipoC: 1500000 }},
+      {nombre: 'iPhone 13 128GB - semi-nuevo', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1650000, addi: 1930500, sistecredito: 2227500, brilla: 2227500, banco: 1950000, tipoA: 1400000, tipoB: 1300000, tipoC: 1200000 }},
+      {nombre: 'iPhone 13 128GB - nuevo', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 2250000, addi: 2632500, sistecredito: 3037500, brilla: 3037500, banco: 2550000, tipoA: 0, tipoB: 0, tipoC: 0 }},
+      {nombre: 'iPhone 13 Pro 128GB', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1990000, addi: 2328300, sistecredito: 2686500, brilla: 2686500, banco: 2290000, tipoA: 1700000, tipoB: 1600000, tipoC: 1500000 }},
+      {nombre: 'iPhone 13 Pro Max 128GB - semi-nuevo', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 2290000, addi: 2679300, sistecredito: 3091500, brilla: 3091500, banco: 2590000, tipoA: 1900000, tipoB: 1800000, tipoC: 1700000 }},
+      {nombre: 'iPhone 13 Pro Max 256GB - semi-nuevo', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 2590000, addi: 3030300, sistecredito: 3496500, brilla: 3496500, banco: 2890000, tipoA: 2000000, tipoB: 1900000, tipoC: 1800000 }},
+      {nombre: 'iPhone 14 128GB - nuevo', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 2650000, addi: 3100500, sistecredito: 3577500, brilla: 3577500, banco: 2950000, tipoA: 0, tipoB: 0, tipoC: 0 }},
+      {nombre: 'iPhone 14 Plus 256GB', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 2200000, addi: 2574000, sistecredito: 2970000, brilla: 2970000, banco: 2500000, tipoA: 1800000, tipoB: 1700000, tipoC: 1600000 }},
+      {nombre: 'iPhone 14 128GB - semi-nuevo', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1890000, addi: 2211300, sistecredito: 2551500, brilla: 2551500, banco: 2190000, tipoA: 1700000, tipoB: 1600000, tipoC: 1500000 }},
+      {nombre: 'iPhone 14 Pro 128GB - semi-nuevo', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 2450000, addi: 2866500, sistecredito: 3307500, brilla: 3307500, banco: 2750000, tipoA: 2000000, tipoB: 1900000, tipoC: 1800000 }},
+      {nombre: 'iPhone 14 Pro 256GB - semi-nuevo', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 2590000, addi: 3030300, sistecredito: 3496500, brilla: 3496500, banco: 2890000, tipoA: 2200000, tipoB: 2100000, tipoC: 2000000 }},
+      {nombre: 'iPhone 14 Pro Max 128GB - semi-nuevo', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 2890000, addi: 3381300, sistecredito: 3901500, brilla: 3901500, banco: 3190000, tipoA: 2500000, tipoB: 2400000, tipoC: 2300000 }},
+      {nombre: 'iPhone 14 Pro Max 256GB - semi-nuevo', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 3090000, addi: 3615300, sistecredito: 4171500, brilla: 4171500, banco: 3390000, tipoA: 2700000, tipoB: 2600000, tipoC: 2500000 }},
+      {nombre: 'iPhone 15 128GB - semi-nuevo', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 2450000, addi: 2866500, sistecredito: 3307500, brilla: 3307500, banco: 2750000, tipoA: 2300000, tipoB: 2200000, tipoC: 2100000 }},
+      {nombre: 'iPhone 15 Pro 128GB - semi-nuevo', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 3200000, addi: 3744000, sistecredito: 4320000, brilla: 4320000, banco: 3500000, tipoA: 2800000, tipoB: 2700000, tipoC: 2600000 }},
+      {nombre: 'iPhone 15 Pro 256GB - semi-nuevo', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 3300000, addi: 3861000, sistecredito: 4455000, brilla: 4455000, banco: 3600000, tipoA: 3000000, tipoB: 2900000, tipoC: 2800000 }},
+      {nombre: 'iPhone 15 Pro Max 256GB - semi-nuevo', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 3690000, addi: 4317300, sistecredito: 4981500, brilla: 4981500, banco: 3990000, tipoA: 3400000, tipoB: 3300000, tipoC: 3200000 }},
+      {nombre: 'iPhone 15 Pro Max 512GB - semi-nuevo', estado: 'semi-nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 3990000, addi: 4668300, sistecredito: 5386500, brilla: 5386500, banco: 4290000, tipoA: 3700000, tipoB: 3600000, tipoC: 3500000 }},
+      {nombre: 'iPhone 16 128GB - nuevo', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 3490000, addi: 4083300, sistecredito: 4711500, brilla: 4711500, banco: 3790000, tipoA: 0, tipoB: 0, tipoC: 0 }},
+      {nombre: 'iPhone 16 256GB - nuevo', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 3900000, addi: 4563000, sistecredito: 5265000, brilla: 5265000, banco: 4200000, tipoA: 0, tipoB: 0, tipoC: 0 }},
+      {nombre: 'iPhone 16 Plus 128GB - nuevo', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 4200000, addi: 4914000, sistecredito: 5670000, brilla: 5670000, banco: 4500000, tipoA: 0, tipoB: 0, tipoC: 0 }},
+      {nombre: 'iPhone 16 Plus 256GB - nuevo', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 4500000, addi: 5265000, sistecredito: 6075000, brilla: 6075000, banco: 4800000, tipoA: 0, tipoB: 0, tipoC: 0 }},
+      {nombre: 'iPhone 16 Pro 128GB - nuevo', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 4300000, addi: 5031000, sistecredito: 5805000, brilla: 5805000, banco: 4600000, tipoA: 0, tipoB: 0, tipoC: 0 }},
+      {nombre: 'iPhone 16 Pro 256GB - nuevo', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 4600000, addi: 5382000, sistecredito: 6210000, brilla: 6210000, banco: 4900000, tipoA: 0, tipoB: 0, tipoC: 0 }},
+      {nombre: 'iPhone 16 Pro Max 256GB - nuevo', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 4990000, addi: 5838300, sistecredito: 6736500, brilla: 6736500, banco: 5290000, tipoA: 0, tipoB: 0, tipoC: 0 }},
+      {nombre: 'iPhone 16 Pro Max 512GB - nuevo', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 5990000, addi: 7008300, sistecredito: 8086500, brilla: 8086500, banco: 6290000, tipoA: 0, tipoB: 0, tipoC: 0 }},
+      {nombre: 'iPhone 16 Pro Max 1TB - nuevo', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 6990000, addi: 8178300, sistecredito: 9436500, brilla: 9436500, banco: 7290000, tipoA: 0, tipoB: 0, tipoC: 0 }},
+      {nombre: 'Samsung A05 128GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 400000, addi: 468000, sistecredito: 540000, brilla: 540000, banco: 700000 }},
+      {nombre: 'Samsung A06 128GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 450000, addi: 52650, sistecredito: 607500, brilla: 607500, banco: 750000 }},
+      {nombre: 'Samsung A16 256GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 750000, addi: 877500, sistecredito: 1012500, brilla: 1012500, banco: 1050000 }},
+      {nombre: 'Samsung A26 256GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1080000, addi: 1263600, sistecredito: 1458000, brilla: 1458000, banco: 1380000 }},
+      {nombre: 'Samsung A36 256GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1200000, addi: 1404000, sistecredito: 1620000, brilla: 1620000, banco: 1500000 }},
+      {nombre: 'Samsung A56 256GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1550000, addi: 1813500, sistecredito: 2092500, brilla: 2092500, banco: 1850000 }},
+      {nombre: 'Samsung A56 256GB/12GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1700000, addi: 1989000, sistecredito: 2295000, brilla: 2295000, banco: 2000000 }},
+      {nombre: 'Samsung A55 256GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 1500000, addi: 1755000, sistecredito: 2025000, brilla: 2025000, banco: 1800000 }},
+      {nombre: 'Galaxy S25 Ultra 256GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 4500000, addi: 5265000, sistecredito: 6075000, brilla: 6075000, banco: 4800000 }},
+      {nombre: 'Redmi 14C 256GB/8GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 510000, addi: 596700, sistecredito: 688500, brilla: 688500, banco: 810000 }},
+      {nombre: 'Redmi Note 14 256GB - nuevo', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 760000, addi: 889200, sistecredito: 1026000, brilla: 1026000, banco: 1060000 }},
+      {nombre: 'Redmi Note 14 Pro 256GB/8GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 950000, addi: 1111500, sistecredito: 1282500, brilla: 1282500, banco: 1250000 }},
+      {nombre: 'Redmi 15 256GB/8GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 695000, addi: 813150, sistecredito: 938250, brilla: 938250, banco: 995000 }},
+      {nombre: 'Redmi 15C 128GB/4GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 650000, addi: 760500, sistecredito: 877500, brilla: 877500, banco: 950000 }},
+      {nombre: 'Redmi A5 128GB/4GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 405000, addi: 473850, sistecredito: 546750, brilla: 546750, banco: 705000 }},
+      {nombre: 'Moto E15 64GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 350000, addi: 409500, sistecredito: 472500, brilla: 472500, banco: 650000 }},
+      {nombre: 'Moto E14 128GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 390000, addi: 456300, sistecredito: 526500, brilla: 526500, banco: 690000 }},
+      {nombre: 'Moto G05 128GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 440000, addi: 514800, sistecredito: 594000, brilla: 594000, banco: 740000 }},
+      {nombre: 'Apple Pencil Conector USB-C', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 250000, addi: 292500, sistecredito: 337500, brilla: 337500, banco: 550000 }},
+      {nombre: 'Apple Pencil 2da Gen', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 220000, addi: 257400, sistecredito: 297000, brilla: 297000, banco: 520000 }},
+      {nombre: 'Audífonos con Cable (EarPods)', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 110000, addi: 128700, sistecredito: 148500, brilla: 148500, banco: 410000 }},
+      {nombre: 'Leather Wallet con MagSafe', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 70000, addi: 81900, sistecredito: 94500, brilla: 94500, banco: 370000 }},
+      {nombre: 'Protector Apple Watch', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 45000, addi: 52650, sistecredito: 60750, brilla: 60750, banco: 345000 }},
+      {nombre: 'Forro para MacBook', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 120000, addi: 140400, sistecredito: 162000, brilla: 162000, banco: 420000 }},
+      {nombre: 'Protector de Cámara', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 30000, addi: 35100, sistecredito: 40500, brilla: 40500, banco: 330000 }},
+      {nombre: 'Protector de Cargador', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 45000, addi: 52650, sistecredito: 60750, brilla: 60750, banco: 345000 }},
+      {nombre: 'Protector de Punta (Apple Pencil)', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 15000, addi: 17550, sistecredito: 20250, brilla: 20250, banco: 315000 }},
+      {nombre: 'Hidrogel para Pantalla', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 30000, addi: 35100, sistecredito: 40500, brilla: 40500, banco: 330000 }},
+      {nombre: 'Cable de iPhone', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 80000, addi: 93600, sistecredito: 108000, brilla: 108000, banco: 380000 }},
+      {nombre: 'Adaptador de Corriente 20W', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 120000, addi: 140400, sistecredito: 162000, brilla: 162000, banco: 420000 }},
+      {nombre: 'Cargador Completo iPhone (20W)', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 220000, addi: 257400, sistecredito: 297000, brilla: 297000, banco: 520000 }},
+      {nombre: 'Cargador Original Samsung 25W', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 130000, addi: 152100, sistecredito: 175500, brilla: 175500, banco: 430000 }},
+      {nombre: 'Manilla para Apple Watch', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 40000, addi: 46800, sistecredito: 54000, brilla: 54000, banco: 340000 }},
+      {nombre: 'AirPods 2da Generación', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 250000, addi: 292500, sistecredito: 337500, brilla: 337500, banco: 550000 }},
+      {nombre: 'AirPods 3ra Generación', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 250000, addi: 292500, sistecredito: 337500, brilla: 337500, banco: 550000 }},
+      {nombre: 'MacBook Air M1 8GB 256GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 5, precios: { contado: 4700000, addi: 5499000, sistecredito: 6345000, brilla: 6345000, banco: 5000000 }},
+      {nombre: 'AirPods Pro (Original)', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 890000, addi: 1041300, sistecredito: 1201500, brilla: 1201500, banco: 1190000 }},
+      {nombre: 'Parlante Bose', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 5, precios: { contado: 3600000, addi: 4212000, sistecredito: 4860000, brilla: 4860000, banco: 3900000 }},
+      {nombre: 'Trípode para Celular', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 250000, addi: 292500, sistecredito: 337500, brilla: 337500, banco: 550000 }},
+      {nombre: 'iPad 10ma Gen 10.9" 64GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 5, precios: { contado: 2250000, addi: 2632500, sistecredito: 3037500, brilla: 3037500, banco: 2550000 }},
+      {nombre: 'iPad Pro 4ta Gen 11"', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 5, precios: { contado: 5500000, addi: 6435000, sistecredito: 7425000, brilla: 7425000, banco: 5800000 }},
+      {nombre: 'Shock Armor Case', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 250000, addi: 292500, sistecredito: 337500, brilla: 337500, banco: 550000 }},
+      {nombre: 'Batería Portátil (Power Bank)', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 350000, addi: 409500, sistecredito: 472500, brilla: 472500, banco: 650000 }},
+      {nombre: 'Apple Watch SE 40mm', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 5, precios: { contado: 1150000, addi: 1345500, sistecredito: 1552500, brilla: 1552500, banco: 1450000 }},
+      {nombre: 'MacBook Air M2 8GB 256GB', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 5, precios: { contado: 5800000, addi: 6786000, sistecredito: 7830000, brilla: 7830000, banco: 6100000 }},
+      {nombre: 'Computador HP', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 5, precios: { contado: 2200000, addi: 2574000, sistecredito: 2970000, brilla: 2970000, banco: 2500000 }},
+      {nombre: 'Contadora de Billetes', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 480000, addi: 561600, sistecredito: 648000, brilla: 648000, banco: 780000 }},
+      {nombre: 'Diademas JBL', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 420000, addi: 491400, sistecredito: 567000, brilla: 567000, banco: 720000 }},
+      {nombre: 'Cargador MacBook', estado: 'nuevo', img: PLACEHOLDER_SVG, stock: 10, precios: { contado: 180000, addi: 210600, sistecredito: 243000, brilla: 243000, banco: 480000 }},
+    ];
+
+    // --- COMPONENT: Header ---
+    const Header = () => {
+      return (
+        <header className="sticky top-0 z-30 flex items-center justify-between px-4 py-2.5 bg-black/75 backdrop-blur-lg border-b border-[#2a2a2a]">
+          <div className="flex items-center gap-2.5">
+            <div className="grid w-9 h-9 rounded-lg place-items-center bg-[radial-gradient(70%_60%_at_50%_40%,rgba(230,0,0,0.3)_0,transparent_60%),linear-gradient(135deg,#1a1a1a,#0c0c0c)] font-extrabold text-white">
+              T+
+            </div>
+            <span className="text-xl text-white">
+              <strong className="text-[#e60000]">Tecno</strong>+
+            </span>
+          </div>
+          <nav className="flex gap-2.5">
+            <a href="#catalogo" className="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 font-bold text-white bg-transparent border border-[#2a2a2a] rounded-lg cursor-pointer select-none hover:border-[#e60000] transition-colors" aria-label="Ir al inventario">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:hidden" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M3 3a1 1 0 000 2h14a1 1 0 100-2H3zM3 7a1 1 0 000 2h14a1 1 0 100-2H3zM3 11a1 1 0 100 2h14a1 1 0 100-2H3zM3 15a1 1 0 100 2h14a1 1 0 100-2H3z" />
+              </svg>
+              <span className="hidden sm:inline">Inventario</span>
+            </a>
+            <a href="#cotizacion" className="inline-flex items-center justify-center gap-2 px-3 sm:px-4 py-2.5 font-bold text-white bg-[#e60000] rounded-lg cursor-pointer select-none hover:bg-[#b00000] hover:-translate-y-0.5 transition-transform" aria-label="Ver cotización">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:hidden" viewBox="0 0 20 20" fill="currentColor">
+                <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3zM16 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM6.5 18a1.5 1.5 0 100-3 1.5 1.5 0 000 3z" />
+              </svg>
+              <span className="hidden sm:inline">Ver cotización</span>
+            </a>
+          </nav>
+        </header>
+      );
+    };
+
+    // --- COMPONENT: Hero ---
+    const Hero = () => {
+      return (
+        <section className="hero relative overflow-hidden bg-black text-center py-16 sm:py-20 md:py-24 px-4">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_500px_at_50%_200px,#e6000033,transparent)] opacity-50"></div>
+          <div className="relative max-w-3xl mx-auto animate-fadeUp">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold m-0 mb-2.5 text-white">Arma tu cotización con el inventario Tecno+</h1>
+            <p className="opacity-90 m-0 mb-5 text-[#e6e6e6]">
+              Selecciona equipos del inventario, define cantidades y medio de pago, y <strong>envía tu cotización por WhatsApp</strong>.
+            </p>
+            <a href="#catalogo" className="inline-flex items-center justify-center gap-2 px-7 py-4 text-lg font-bold text-white bg-[#e60000] rounded-lg cursor-pointer select-none hover:bg-[#b00000] hover:-translate-y-0.5 transition-transform">
+              Armar cotización
+            </a>
+          </div>
+        </section>
+      );
+    };
+
+    // --- COMPONENT: Controls ---
+    const ControlWrapper = ({ label, htmlFor, children }) => (
+      <div className="flex flex-col gap-1.5">
+        <label htmlFor={htmlFor} className="text-sm text-[#bdbdbd]">{label}</label>
+        {children}
+      </div>
+    );
+    const commonInputStyles = "bg-[#202020] text-white border border-[#2a2a2a] rounded-lg px-3 py-2.5 outline-none focus:ring-2 focus:ring-[#e60000] focus:border-transparent transition";
+    const Controls = ({ query, onQueryChange, paymentMethod, onPaymentMethodChange, condition, onConditionChange }) => {
+      return (
+        <section className="border-b border-[#2a2a2a] bg-[#141414]" aria-label="Controles del inventario">
+          <div className="container mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr,220px,180px] gap-3 p-4">
+            <ControlWrapper label="Buscar modelo" htmlFor="buscador">
+              <input
+                id="buscador"
+                type="search"
+                placeholder="Ej. iPhone 13, Pro Max, 128GB…"
+                className={commonInputStyles}
+                value={query}
+                onChange={(e) => onQueryChange(e.target.value)}
+              />
+            </ControlWrapper>
+            <ControlWrapper label="Medio de pago" htmlFor="medioPago">
+              <select
+                id="medioPago"
+                className={commonInputStyles}
+                value={paymentMethod}
+                onChange={(e) => onPaymentMethodChange(e.target.value)}
+              >
+                <option value="contado">Contado</option>
+                <option value="addi">Addi</option>
+                <option value="sistecredito">Sistecrédito</option>
+                <option value="brilla">Brilla</option>
+                <option value="banco">Banco de Bogotá</option>
+              </select>
+            </ControlWrapper>
+            <ControlWrapper label="Condición" htmlFor="filtroEstado">
+              <select
+                id="filtroEstado"
+                className={commonInputStyles}
+                value={condition}
+                onChange={(e) => onConditionChange(e.target.value)}
+              >
+                <option value="todos">Todos</option>
+                <option value="nuevo">Nuevo</option>
+                <option value="semi-nuevo">Semi-nuevo</option>
+              </select>
+            </ControlWrapper>
+          </div>
+        </section>
+      );
+    };
+
+    // --- COMPONENT: TradeInCalculator ---
+    const TradeInCalculator = () => {
+        const [selectedModel, setSelectedModel] = React.useState('');
+        const [selectedCondition, setSelectedCondition] = React.useState('tipoA');
+        const [estimatedValue, setEstimatedValue] = React.useState(0);
+
+        const tradeInModels = React.useMemo(() => {
+            return CATALOGO.filter(p => p.precios.tipoA || p.precios.tipoB || p.precios.tipoC || p.precios.repuesto)
+                .sort((a, b) => a.nombre.localeCompare(b.nombre));
+        }, []);
+
+        React.useEffect(() => {
+            if (!selectedModel) {
+                setEstimatedValue(0);
+                return;
+            }
+            const product = CATALOGO.find(p => p.nombre === selectedModel);
+            const value = product?.precios[selectedCondition] ?? 0;
+            setEstimatedValue(value);
+        }, [selectedModel, selectedCondition]);
+
+        const fmtCOP = (n) => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n);
+
+        return (
+            <section className="border-b border-[#2a2a2a] bg-black" aria-labelledby="trade-in-title">
+                <div className="container mx-auto p-4">
+                    <h3 id="trade-in-title" className="text-lg font-bold text-white mb-3">Calculadora de Canje</h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-[1fr,1fr,auto] gap-3 items-end">
+                        <ControlWrapper label="Modelo de tu iPhone" htmlFor="tradeInModel">
+                            <select
+                                id="tradeInModel"
+                                className={commonInputStyles + ' h-[46px]'}
+                                value={selectedModel}
+                                onChange={(e) => setSelectedModel(e.target.value)}
+                            >
+                                <option value="">-- Selecciona un modelo --</option>
+                                {tradeInModels.map(p => (
+                                    <option key={p.nombre} value={p.nombre}>{p.nombre}</option>
+                                ))}
+                            </select>
+                        </ControlWrapper>
+                        <ControlWrapper label="Condición del equipo" htmlFor="tradeInCondition">
+                            <select
+                                id="tradeInCondition"
+                                className={commonInputStyles + ' h-[46px]'}
+                                value={selectedCondition}
+                                onChange={(e) => setSelectedCondition(e.target.value)}
+                            >
+                                <option value="tipoA">Tipo A (Excelente estado, sin detalles)</option>
+                                <option value="tipoB">Tipo B (Buen estado, rayones leves)</option>
+                                <option value="tipoC">Tipo C (Detalles visibles, funcional)</option>
+                                <option value="repuesto">Para Repuesto (No funcional, pantalla rota)</option>
+                            </select>
+                        </ControlWrapper>
+                        <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-2.5 text-center h-[46px] flex flex-col justify-center">
+                            <span className="text-sm text-[#bdbdbd] block">Valor estimado de canje:</span>
+                            <strong
+                                className="text-lg text-[#e60000] font-extrabold"
+                                aria-live="polite"
+                            >
+                                {fmtCOP(estimatedValue)}
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        );
+    };
+
+    // --- COMPONENT: ProductCard ---
+    const Badge = ({ children }) => (
+      <span className="inline-flex items-center bg-[#121212] border border-[#2a2a2a] px-2 py-1 rounded-full text-xs capitalize">
+        {children.toString().replace('-', ' ')}
+      </span>
+    );
+
+    const ProductCard = ({ product, paymentMethod, onAddToCart }) => {
+      const [quantity, setQuantity] = React.useState(1);
+      const [isAdded, setIsAdded] = React.useState(false);
+      const [popoverOpen, setPopoverOpen] = React.useState(false);
+      const popoverRef = React.useRef(null);
+      const buttonRef = React.useRef(null);
+
+      React.useEffect(() => {
+        const handleClickOutside = (event) => {
+          if (
+            popoverRef.current && !popoverRef.current.contains(event.target) &&
+            buttonRef.current && !buttonRef.current.contains(event.target)
+          ) {
+            setPopoverOpen(false);
+          }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+      }, []);
+
+      const price = product.precios[paymentMethod];
+      const fmtCOP = (n) => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n);
+
+      const handleAddToCart = () => {
+        const qty = Math.max(1, Math.min(quantity, product.stock));
+        onAddToCart(product, qty);
+        setIsAdded(true);
+        setTimeout(() => setIsAdded(false), 1000);
+      };
+
+      const handleQuantityChange = (e) => {
+        const val = parseInt(e.target.value, 10);
+        if (!isNaN(val)) {
+            setQuantity(Math.max(1, Math.min(val, product.stock)));
+        } else if (e.target.value === '') {
+            setQuantity(1);
+        }
+      }
+
+      const hasTradeInPrices = product.precios.tipoA || product.precios.tipoB || product.precios.tipoC || product.precios.repuesto;
+
+      const CreditOptionsPopover = () => (
+        <div ref={popoverRef} className="absolute z-10 bottom-full mb-2 left-0 sm:left-auto sm:right-0 w-64 bg-[#121212] border border-[#2a2a2a] rounded-lg shadow-lg p-3 text-white text-sm">
+          <h4 className="font-bold mb-2 text-base">Opciones de Pago</h4>
+          <ul className="space-y-1">
+            <li className="flex justify-between"><span>Contado:</span> <strong>{fmtCOP(product.precios.contado)}</strong></li>
+            <li className="flex justify-between"><span>Addi:</span> <strong>{fmtCOP(product.precios.addi)}</strong></li>
+            <li className="flex justify-between"><span>Sistecrédito:</span> <strong>{fmtCOP(product.precios.sistecredito)}</strong></li>
+            <li className="flex justify-between"><span>Brilla:</span> <strong>{fmtCOP(product.precios.brilla)}</strong></li>
+            <li className="flex justify-between"><span>Banco de Bogotá:</span> <strong>{fmtCOP(product.precios.banco)}</strong></li>
+          </ul>
+          {hasTradeInPrices && (
+            <React.Fragment>
+              <div className="border-t border-dashed border-[#2a2a2a] my-2"></div>
+              <h5 className="font-bold mb-1 text-gray-300">Precios de Intercambio</h5>
+              <ul className="space-y-1 text-xs">
+                {product.precios.tipoA ? <li className="flex justify-between"><span>Tipo A:</span> <strong>{fmtCOP(product.precios.tipoA)}</strong></li> : null}
+                {product.precios.tipoB ? <li className="flex justify-between"><span>Tipo B:</span> <strong>{fmtCOP(product.precios.tipoB)}</strong></li> : null}
+                {product.precios.tipoC ? <li className="flex justify-between"><span>Tipo C:</span> <strong>{fmtCOP(product.precios.tipoC)}</strong></li> : null}
+                {product.precios.repuesto ? <li className="flex justify-between"><span>Repuesto:</span> <strong>{fmtCOP(product.precios.repuesto)}</strong></li> : null}
+              </ul>
+            </React.Fragment>
+          )}
+        </div>
+      );
+
+      return (
+        <tr className="border-b border-[#2a2a2a] last:border-b-0 hover:bg-[#202020]/50 transition-colors">
+          <td className="px-2 py-3 sm:p-3 font-bold text-white text-sm align-middle">{product.nombre}</td>
+          <td className="px-2 py-3 sm:p-3 text-sm align-middle"><Badge>{product.estado}</Badge></td>
+          <td className="px-2 py-3 sm:p-3 text-right font-extrabold text-[#ffdede] text-base align-middle whitespace-nowrap">
+            <div className="flex items-center justify-end gap-2 relative">
+              <span>{fmtCOP(price)}</span>
+              <button
+                ref={buttonRef}
+                onClick={() => setPopoverOpen(!popoverOpen)}
+                className="p-1 rounded-full hover:bg-white/10 transition-colors"
+                aria-label="Ver opciones de crédito"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
+                </svg>
+              </button>
+              {popoverOpen && <CreditOptionsPopover />}
+            </div>
+          </td>
+          <td className="px-2 py-3 sm:p-3 align-middle">
+            {product.stock > 0 ? (
+              <div className="flex items-center justify-end gap-1 sm:gap-2">
+                <label htmlFor={`q-${product.nombre}`} className="sr-only">Cantidad</label>
+                <input
+                  id={`q-${product.nombre}`}
+                  type="number"
+                  min="1"
+                  max={product.stock}
+                  value={quantity}
+                  onChange={handleQuantityChange}
+                  className="w-14 sm:w-16 bg-[#121212] text-white border border-[#2a2a2a] rounded-lg p-2 text-center focus:ring-1 focus:ring-[#e60000] focus:border-transparent"
+                />
+                <button
+                  onClick={handleAddToCart}
+                  className={`inline-flex items-center justify-center px-3 sm:px-4 py-2 font-bold text-white rounded-lg cursor-pointer select-none transition-colors duration-300 text-sm ${isAdded ? 'bg-[#2ecc71]' : 'bg-[#e60000] hover:bg-[#b00000]'}`}
+                >
+                  {isAdded ? '✓' : 'Agregar'}
+                </button>
+              </div>
+            ) : (
+              <div className="flex justify-end">
+                <a href={WA_BASE} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center px-4 py-2 font-bold text-white bg-transparent border border-[#2a2a2a] rounded-lg cursor-pointer select-none hover:border-[#e60000] text-sm">
+                  Consultar
+                </a>
+              </div>
+            )}
+          </td>
+        </tr>
+      );
+    };
+
+    // --- COMPONENT: ProductGrid ---
+    const ProductGrid = ({ products, paymentMethod, onAddToCart }) => {
+      const paymentLabel = { contado: 'Contado', addi: 'Addi', sistecredito: 'Sistecrédito', brilla: 'Brilla', banco: 'Banco de Bogotá' }[paymentMethod];
+
+      const scrollContainerRef = React.useRef(null);
+      const [showLeftFade, setShowLeftFade] = React.useState(false);
+      const [showRightFade, setShowRightFade] = React.useState(false);
+
+      const handleScrollAndResize = React.useCallback(() => {
+        const el = scrollContainerRef.current;
+        if (el) {
+          const hasOverflow = el.scrollWidth > el.clientWidth;
+          if (!hasOverflow) {
+            setShowLeftFade(false);
+            setShowRightFade(false);
+            return;
+          }
+          
+          const isScrolledToLeft = el.scrollLeft <= 0;
+          const isScrolledToRight = el.scrollLeft + el.clientWidth >= el.scrollWidth - 1;
+          
+          setShowLeftFade(!isScrolledToLeft);
+          setShowRightFade(!isScrolledToRight);
+        }
+      }, []);
+
+      React.useEffect(() => {
+        const el = scrollContainerRef.current;
+        if (!el) return;
+
+        handleScrollAndResize();
+
+        el.addEventListener('scroll', handleScrollAndResize, { passive: true });
+        const resizeObserver = new ResizeObserver(handleScrollAndResize);
+        resizeObserver.observe(el);
+
+        return () => {
+          el.removeEventListener('scroll', handleScrollAndResize);
+          resizeObserver.disconnect();
+        };
+      }, [handleScrollAndResize, products]);
+
+      return (
+        <div className="relative">
+          <div
+            ref={scrollContainerRef}
+            className="overflow-x-auto bg-[#1a1a1a] border border-[#2a2a1a] rounded-2xl"
+          >
+            <table className="w-full text-left min-w-[600px]">
+              <thead className="border-b border-[#2a2a1a] bg-black/20 sticky top-0 z-10">
+                <tr>
+                  <th className="px-2 py-3 sm:p-3 text-sm font-bold text-white uppercase tracking-wider bg-[#1a1a1a]">Modelo</th>
+                  <th className="px-2 py-3 sm:p-3 text-sm font-bold text-white uppercase tracking-wider bg-[#1a1a1a]">Condición</th>
+                  <th className="px-2 py-3 sm:p-3 text-sm font-bold text-white uppercase tracking-wider text-right bg-[#1a1a1a]">Precio ({paymentLabel})</th>
+                  <th className="px-2 py-3 sm:p-3 text-sm font-bold text-white uppercase tracking-wider text-right bg-[#1a1a1a]">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {products.length === 0 ? (
+                  <tr>
+                    <td colSpan={4} className="p-6 text-center text-[#bdbdbd]">
+                      No se encontraron modelos que coincidan con tu búsqueda.
+                    </td>
+                  </tr>
+                ) : (
+                  products.map(product => (
+                    <ProductCard
+                      key={product.nombre}
+                      product={product}
+                      paymentMethod={paymentMethod}
+                      onAddToCart={onAddToCart}
+                    />
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+          <div 
+            aria-hidden="true"
+            className={`absolute top-0 left-0 h-full w-8 bg-gradient-to-r from-[#1a1a1a] to-transparent pointer-events-none transition-opacity duration-300 rounded-l-2xl ${showLeftFade ? 'opacity-100' : 'opacity-0'}`}
+          />
+          <div
+            aria-hidden="true"
+            className={`absolute top-0 right-0 h-full w-8 bg-gradient-to-l from-[#1a1a1a] to-transparent pointer-events-none transition-opacity duration-300 rounded-r-2xl ${showRightFade ? 'opacity-100' : 'opacity-0'}`}
+          />
+        </div>
+      );
+    };
+
+    // --- COMPONENT: Quote ---
+    const QuoteItem = ({ item, onRemove }) => {
+        const fmtCOP = (n) => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n);
+        const paymentLabel = (key) => ({ contado: 'Contado', addi: 'Addi', sistecredito: 'Sistecrédito', brilla: 'Brilla', banco: 'Banco de Bogotá' })[key] || 'Contado';
+        
+        return (
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between bg-[#121212] border border-[#2a2a2a] rounded-xl p-2.5 gap-2">
+                <div className="flex-grow">
+                    <div className="font-bold text-sm">{item.nombre}</div>
+                    <div className="text-[#cfcfcf] text-xs">{paymentLabel(item.medio)}</div>
+                </div>
+                <div className="flex items-center justify-between sm:justify-end gap-4">
+                    <div className="text-right">
+                        <div className="text-sm">{item.cantidad} u. x {fmtCOP(item.precio)}</div>
+                    </div>
+                    <div className="text-right">
+                        <strong className="text-sm block">{fmtCOP(item.precio * item.cantidad)}</strong>
+                        <div onClick={() => onRemove(item.key)} className="text-[#ffb0b0] hover:text-[#ff6b6b] cursor-pointer text-xs" role="button" aria-label="Quitar">
+                            Eliminar
+                        </div>
+                    </div>
+                </div>
+            </div>
+        );
+    };
+
+    const Quote = ({ cart, paymentMethod, onRemoveItem, onClearCart, onSendWhatsApp }) => {
+      const total = cart.reduce((acc, item) => acc + item.precio * item.cantidad, 0);
+      const fmtCOP = (n) => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n);
+      const paymentLabel = (key) => ({ contado: 'Contado', addi: 'Addi', sistecredito: 'Sistecrédito', brilla: 'Brilla', banco: 'Banco de Bogotá' })[key] || 'Contado';
+
+      return (
+        <aside id="cotizacion" className="py-7 border-t border-[#2a2a2a] bg-[#0a0a0a]">
+          <div className="container mx-auto px-4">
+            <h2 className="text-white text-2xl font-bold mb-4">Tu cotización</h2>
+            <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-2xl p-3">
+              {cart.length === 0 ? (
+                <div className="py-6 text-center text-[#cfcfcf]">Aún no has agregado productos.</div>
+              ) : (
+                <React.Fragment>
+                  <div className="flex flex-col gap-2">
+                    {cart.map(item => (
+                        <QuoteItem key={item.key} item={item} onRemove={onRemoveItem} />
+                    ))}
+                  </div>
+                  <div className="mt-3 border-t border-dashed border-[#2a2a2a] pt-2.5">
+                    <div className="flex justify-between items-center font-bold">
+                      <span>Total</span>
+                      <strong className="text-xl">{fmtCOP(total)}</strong>
+                    </div>
+                    <p className="text-[#cfcfcf] text-xs mt-2">
+                      *Precios según <span className="font-semibold">{paymentLabel(paymentMethod)}</span>. Puedes cambiar el medio de pago arriba.
+                    </p>
+                  </div>
+                </React.Fragment>
+              )}
+            </div>
+            <div className="mt-4 flex flex-col sm:flex-row gap-2">
+              <button 
+                onClick={onSendWhatsApp} 
+                className="w-full sm:flex-grow order-1 sm:order-2 inline-flex items-center justify-center gap-2 px-7 py-4 text-lg font-bold text-white bg-[#e60000] rounded-lg cursor-pointer select-none hover:bg-[#b00000] transition-colors disabled:opacity-50 disabled:cursor-not-allowed" 
+                disabled={cart.length === 0}
+              >
+                Enviar por WhatsApp 💬
+              </button>
+              <button 
+                onClick={onClearCart} 
+                disabled={cart.length === 0} 
+                className="w-full sm:w-auto order-2 sm:order-1 inline-flex items-center justify-center gap-2 px-4 py-2.5 font-bold text-white bg-transparent border border-[#2a2a2a] rounded-lg cursor-pointer select-none hover:border-[#e60000] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Limpiar
+              </button>
+            </div>
+          </div>
+        </aside>
+      );
+    };
+
+    // --- COMPONENT: Footer ---
+    const Footer = () => {
+      return (
+        <footer className="border-t border-[#2a2a2a] py-5 bg-black text-[#bdbdbd] text-sm">
+          <div className="container mx-auto px-4">
+            <p>© 2025 Tecno+ Montería — Negro · Rojo · Blanco — Atención inmediata por WhatsApp.</p>
+          </div>
+        </footer>
+      );
+    };
+
+    // --- MAIN APP COMPONENT ---
+    const App = () => {
+      const loadFromStorage = (key, defaultValue) => {
+        try {
+          const storedValue = localStorage.getItem(key);
+          return storedValue ? JSON.parse(storedValue) : defaultValue;
+        } catch {
+          return defaultValue;
+        }
+      };
+
+      const saveToStorage = (key, value) => {
+        localStorage.setItem(key, JSON.stringify(value));
+      };
+
+      const [query, setQuery] = React.useState('');
+      const [condition, setCondition] = React.useState('todos');
+      const [paymentMethod, setPaymentMethod] = React.useState(() => loadFromStorage('tecnoplus_medio', 'contado'));
+      const [cart, setCart] = React.useState(() => loadFromStorage('tecnoplus_cart_v1', []));
+      
+      React.useEffect(() => {
+        saveToStorage('tecnoplus_medio', paymentMethod);
+        setCart(prevCart => {
+          const updatedCart = prevCart.map(item => {
+            const product = CATALOGO.find(p => p.nombre === item.nombre);
+            if (product) {
+              return {
+                ...item,
+                precio: product.precios[paymentMethod],
+                medio: paymentMethod,
+              };
+            }
+            return item;
+          });
+          saveToStorage('tecnoplus_cart_v1', updatedCart);
+          return updatedCart;
+        });
+      }, [paymentMethod]);
+
+      const filteredCatalog = React.useMemo(() => {
+        return CATALOGO.filter(p => {
+          const matchText = (p.nombre + ' ' + p.estado).toLowerCase().includes(query.toLowerCase());
+          const matchCondition = condition === 'todos' ? true : p.estado === condition;
+          return matchText && matchCondition;
+        });
+      }, [query, condition]);
+
+      const slug = (s) => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^\w]+/g, "-");
+
+      const addToCart = React.useCallback((product, quantity) => {
+        setCart(prevCart => {
+          const key = slug(product.nombre);
+          const existingItemIndex = prevCart.findIndex(item => item.key === key);
+          let newCart;
+
+          if (existingItemIndex > -1) {
+            newCart = [...prevCart];
+            const existingItem = newCart[existingItemIndex];
+            const newQuantity = Math.min(existingItem.cantidad + quantity, product.stock);
+            newCart[existingItemIndex] = {
+              ...existingItem,
+              cantidad: newQuantity,
+              precio: product.precios[paymentMethod],
+              medio: paymentMethod
+            };
+          } else {
+            newCart = [
+              ...prevCart,
+              {
+                key,
+                nombre: product.nombre,
+                medio: paymentMethod,
+                precio: product.precios[paymentMethod],
+                cantidad: quantity,
+                stock: product.stock,
+              },
+            ];
+          }
+          saveToStorage('tecnoplus_cart_v1', newCart);
+          return newCart;
+        });
+      }, [paymentMethod]);
+
+      const removeFromCart = React.useCallback((key) => {
+        setCart(prevCart => {
+          const newCart = prevCart.filter(item => item.key !== key);
+          saveToStorage('tecnoplus_cart_v1', newCart);
+          return newCart;
+        });
+      }, []);
+
+      const clearCart = React.useCallback(() => {
+        setCart([]);
+        saveToStorage('tecnoplus_cart_v1', []);
+      }, []);
+
+      const sendWhatsApp = React.useCallback(() => {
+        if (!cart.length) {
+          alert('Agrega productos a la cotización.');
+          return;
+        }
+
+        const fmtCOP = (n) => new Intl.NumberFormat("es-CO", { style: "currency", currency: "COP", maximumFractionDigits: 0 }).format(n);
+        const paymentLabel = (key) => ({ contado: 'Contado', addi: 'Addi', sistecredito: 'Sistecrédito', brilla: 'Brilla', banco: 'Banco de Bogotá' })[key] || 'Contado';
+
+        let lines = [];
+        lines.push('📱 *Cotización Tecno+ Montería*');
+        lines.push(`💳 Medio de pago: *${paymentLabel(paymentMethod)}*`);
+        lines.push('');
+        let total = 0;
+        for (const it of cart) {
+          const subtotal = it.precio * it.cantidad;
+          total += subtotal;
+          lines.push(`• ${it.nombre}`);
+          lines.push(`   Cant: ${it.cantidad}  |  Unit: ${fmtCOP(it.precio)}  |  Subtotal: ${fmtCOP(subtotal)}`);
+        }
+        lines.push('');
+        lines.push(`💰 *Total:* ${fmtCOP(total)}`);
+        lines.push('');
+        lines.push('📍 Enviado desde la web de Tecno+');
+
+        const text = encodeURIComponent(lines.join('\n'));
+        const url = `${WA_BASE}?text=${text}`;
+        window.open(url, '_blank', 'noopener,noreferrer');
+      }, [cart, paymentMethod]);
+
+      return (
+        <React.Fragment>
+          <Header />
+          <Hero />
+          <Controls
+            query={query}
+            onQueryChange={setQuery}
+            paymentMethod={paymentMethod}
+            onPaymentMethodChange={setPaymentMethod}
+            condition={condition}
+            onConditionChange={setCondition}
+          />
+          <TradeInCalculator />
+          <main id="catalogo" className="container mx-auto px-4" aria-live="polite">
+            <h2 className="text-white text-2xl font-bold my-6">Inventario Tecno+ (arma tu cotización)</h2>
+            <ProductGrid
+              products={filteredCatalog}
+              paymentMethod={paymentMethod}
+              onAddToCart={addToCart}
+            />
+          </main>
+          <Quote
+            cart={cart}
+            paymentMethod={paymentMethod}
+            onRemoveItem={removeFromCart}
+            onClearCart={clearCart}
+            onSendWhatsApp={sendWhatsApp}
+          />
+          <Footer />
+        </React.Fragment>
+      );
+    };
+
+    // --- RENDER APP ---
+    const rootElement = document.getElementById('root');
+    if (!rootElement) {
+      throw new Error("Could not find root element to mount to");
+    }
+
+    const root = ReactDOM.createRoot(rootElement);
+    root.render(
+      <React.StrictMode>
+        <App />
+      </React.StrictMode>
+    );
+  </script>
 </body>
 </html>

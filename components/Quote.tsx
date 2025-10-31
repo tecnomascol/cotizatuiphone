@@ -1,5 +1,5 @@
 import React from 'react';
-import { CartItem, PaymentMethod } from '../types';
+import { CartItem, PaymentMethod } from '../types.ts';
 
 interface QuoteProps {
   cart: CartItem[];

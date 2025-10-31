@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Product, PaymentMethod } from '../types';
-import { WA_BASE } from '../constants';
+import { Product, PaymentMethod } from '../types.ts';
+import { WA_BASE } from '../constants.ts';
 
 interface ProductCardProps {
   product: Product;
@@ -53,6 +53,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, paymentMethod
     }
   }
 
+  const hasTradeInPrices = product.precios.tipoA || product.precios.tipoB || product.precios.tipoC || product.precios.repuesto;
+
   const CreditOptionsPopover = () => (
     <div ref={popoverRef} className="absolute z-10 bottom-full mb-2 left-0 sm:left-auto sm:right-0 w-64 bg-[#121212] border border-[#2a2a2a] rounded-lg shadow-lg p-3 text-white text-sm">
       <h4 className="font-bold mb-2 text-base">Opciones de Pago</h4>
@@ -63,6 +65,18 @@ export const ProductCard: React.FC<ProductCardProps> = ({ product, paymentMethod
         <li className="flex justify-between"><span>Brilla:</span> <strong>{fmtCOP(product.precios.brilla)}</strong></li>
         <li className="flex justify-between"><span>Banco de Bogotá:</span> <strong>{fmtCOP(product.precios.banco)}</strong></li>
       </ul>
+      {hasTradeInPrices && (
+        <>
+          <div className="border-t border-dashed border-[#2a2a2a] my-2"></div>
+          <h5 className="font-bold mb-1 text-gray-300">Precios de Intercambio</h5>
+          <ul className="space-y-1 text-xs">
+            {product.precios.tipoA ? <li className="flex justify-between"><span>Tipo A:</span> <strong>{fmtCOP(product.precios.tipoA)}</strong></li> : null}
+            {product.precios.tipoB ? <li className="flex justify-between"><span>Tipo B:</span> <strong>{fmtCOP(product.precios.tipoB)}</strong></li> : null}
+            {product.precios.tipoC ? <li className="flex justify-between"><span>Tipo C:</span> <strong>{fmtCOP(product.precios.tipoC)}</strong></li> : null}
+            {product.precios.repuesto ? <li className="flex justify-between"><span>Repuesto:</span> <strong>{fmtCOP(product.precios.repuesto)}</strong></li> : null}
+          </ul>
+        </>
+      )}
     </div>
   );
 

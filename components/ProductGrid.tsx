@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { ProductCard } from './ProductCard';
-import { Product, PaymentMethod } from '../types';
+import { ProductCard } from './ProductCard.tsx';
+import { Product, PaymentMethod } from '../types.ts';
 
 interface ProductGridProps {
   products: Product[];

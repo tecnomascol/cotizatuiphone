@@ -1,13 +1,13 @@
-
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { Header } from './components/Header';
-import { Hero } from './components/Hero';
-import { Controls } from './components/Controls';
-import { ProductGrid } from './components/ProductGrid';
-import { Quote } from './components/Quote';
-import { Footer } from './components/Footer';
-import { Product, CartItem, PaymentMethod } from './types';
-import { CATALOGO, WA_BASE } from './constants';
+import { Header } from './components/Header.tsx';
+import { Hero } from './components/Hero.tsx';
+import { Controls } from './components/Controls.tsx';
+import { TradeInCalculator } from './components/TradeInCalculator.tsx';
+import { ProductGrid } from './components/ProductGrid.tsx';
+import { Quote } from './components/Quote.tsx';
+import { Footer } from './components/Footer.tsx';
+import { Product, CartItem, PaymentMethod } from './types.ts';
+import { CATALOGO, WA_BASE } from './constants.ts';
 
 const loadFromStorage = <T,>(key: string, defaultValue: T): T => {
   try {
@@ -147,6 +147,7 @@ const App: React.FC = () => {
         condition={condition}
         onConditionChange={setCondition}
       />
+      <TradeInCalculator />
       <main id="catalogo" className="container mx-auto px-4" aria-live="polite">
         <h2 className="text-white text-2xl font-bold my-6">Inventario Tecno+ (arma tu cotización)</h2>
         <ProductGrid

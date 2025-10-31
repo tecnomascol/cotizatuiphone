@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { PaymentMethod } from '../types';
+import { PaymentMethod } from '../types.ts';
 
 interface ControlsProps {
   query: string;

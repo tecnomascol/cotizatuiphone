@@ -1,4 +1,3 @@
-
 export type PaymentMethod = 'contado' | 'addi' | 'sistecredito' | 'banco' | 'brilla';
 
 export interface Product {
@@ -12,6 +11,10 @@ export interface Product {
     sistecredito: number;
     banco: number;
     brilla: number;
+    tipoA?: number;
+    tipoB?: number;
+    tipoC?: number;
+    repuesto?: number;
   };
 }
 
